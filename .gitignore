@@ -5,5 +5,4 @@
 
 # Generated files
 /config.el
-/config/*.el
 .python-environments
