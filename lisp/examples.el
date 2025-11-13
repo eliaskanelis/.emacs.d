@@ -169,7 +169,7 @@
 ;;   (log "Git is required, exiting...")
 ;;   (kill-emacs 1))
 
-(if (font-available-p "Source Code Pro")
+(if (is-font-available-p "Source Code Pro")
     (log "Found font")
   (log "Could not find font"))
 

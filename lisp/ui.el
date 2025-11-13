@@ -16,7 +16,7 @@
   :ensure nil
   :config
   (when (display-graphic-p)
-  (if (font-available-p modeline-font)
+  (if (is-font-available-p modeline-font)
     (progn
       (set-face-attribute 'default nil :family modeline-font :height modeline-font-height)
         (log "Applied %s font" modeline-font))
@@ -38,7 +38,7 @@
   
   :config
   (setq doom-modeline-height 0) ; optional
-  (if (font-available-p modeline-font)
+  (if (is-font-available-p modeline-font)
       (progn
         (if (facep 'mode-line-active)
             (set-face-attribute 'mode-line-active nil :family modeline-font :height modeline-font-height)
