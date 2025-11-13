@@ -7,7 +7,7 @@
 (setq custom-file "/dev/null")
 
 ;; Add config directory to load-path
-(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; Put the generated files in the cache directory
 (setq init-el-directory user-emacs-directory)
