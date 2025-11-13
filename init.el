@@ -1,5 +1,8 @@
 ;;; init.el --- entry point -*- lexical-binding: t; -*-
 
+;; -----------------------------------------------------------------------------
+;; Bootstrap
+
 ;; Prevent customisations to the end of this file.
 (setq custom-file "/dev/null")
 
@@ -14,10 +17,16 @@
 (require 'core)
 (log "Starting Emacs!")
 
+;; We select elpaca
 (require 'elpaca-bootstrap)
 ;; (require 'use-package-bootstrap)
 
 (require 'general-bootstrap)
+
+;; -----------------------------------------------------------------------------
+;; Custom configuration
+
+(require 'ui)
 
 ;; -----------------------------------------------------------------------------
 
