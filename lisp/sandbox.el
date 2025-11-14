@@ -1,0 +1,18 @@
+;;; sandbox.el --- Sandboxing -*- lexical-binding: t; -*-
+
+;; -----------------------------------------------------------------------------
+;; Better syntax highlighting
+
+(use-package tree-sitter
+  :ensure t
+  :config
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package tree-sitter-langs
+  :ensure t
+  :after tree-sitter)
+
+;; -----------------------------------------------------------------------------
+(provide 'sandbox)
+;;; sandbox.el ends here

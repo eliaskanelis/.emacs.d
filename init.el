@@ -14,8 +14,6 @@
 (setq user-emacs-directory "~/.cache/emacs")
 
 ;; Load modules
-(require 'core)
-(log "Starting Emacs!")
 
 ;; We select elpaca
 (require 'elpaca-bootstrap)
@@ -23,23 +21,17 @@
 
 (require 'general-bootstrap)
 
+(require 'emacs-config)
+(require 'voidbuffer)
+(require 'minibuffer-config)
+(require 'editor)
+(require 'sandbox)
+;; (require 'examples)
+
 ;; -----------------------------------------------------------------------------
 ;; Custom configuration
 
 (require 'ui)
-
-;; -----------------------------------------------------------------------------
-
-(defun print-startup-time ()
-  "Print how long Emacs took to start."
-  (log "Emacs loaded in %.3f seconds with %d garbage collections."
-           (float-time (time-subtract after-init-time before-init-time))
-           gcs-done)
-  (message "Emacs loaded in %.3f seconds with %d garbage collections."
-           (float-time (time-subtract after-init-time before-init-time))
-           gcs-done))
-
-(add-hook 'emacs-startup-hook #'print-startup-time)
 
 ;;------------------------------------------------------------------------------
 ;; End of init.el
