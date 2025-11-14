@@ -91,14 +91,6 @@
 
 ;; -----------------------------------------------------------------------------
 
-;;------------------------------------------------------------------------------
-
-;; We need to load org early because we use it with org-babel
-(use-package org
-  :ensure t)
-
-;; -----------------------------------------------------------------------------
-
 (when (is-linux-p)
   (log "Linux-specific feature enabled"))
 
@@ -149,22 +141,6 @@
 ;; ;; Set the garbage collection early to load faster.
 ;; ;; We will set it back at the end of the init.el
 ;; (setq gc-cons-threshold (* 50 1000 1000))
-
-;; ;; ---------------------------------------------------------------------------
-;; ;; Show startup time in minibuffer
-
-;; (defun my/display-startup-time ()
-;;   (message "Emacs loaded in %s with %d garbage collections."
-;;            (format "%.2f seconds"
-;;                    (float-time
-;;                    (time-subtract after-init-time before-init-time)))
-;;            gcs-done))
-
-;; (add-hook 'emacs-startup-hook #'my/display-startup-time)
-
-;; ;; ---------------------------------------------------------------------------
-;; ;; Install Elpaca Package manager
-
 
 ;; ;; ----------------------------------------------------------------------------
 

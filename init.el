@@ -25,6 +25,7 @@
 (require 'voidbuffer)
 (require 'minibuffer-config)
 (require 'editor)
+(require 'notetaking)
 (require 'sandbox)
 ;; (require 'examples)
 

@@ -5,7 +5,7 @@
 
 (use-package crux
   :ensure t
-  :init
+  :general
   (my-keys
     "d" '(crux-duplicate-current-line-or-region :wk "Duplicate current line")
     "k" '(crux-kill-other-buffers :wk "Kill all other buffers")

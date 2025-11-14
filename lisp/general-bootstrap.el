@@ -73,6 +73,9 @@
     ;; Quit/Exit
     "q q" '(save-buffers-kill-terminal :wk "Quit Emacs")))
 
+;; CRITICAL: Wait for general to load before using :general keyword
+(elpaca-wait)
+
 ;; -----------------------------------------------------------------------------
 
 (use-package which-key
