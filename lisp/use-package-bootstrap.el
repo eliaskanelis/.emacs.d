@@ -1,13 +1,7 @@
 ;;; use-package-bootstrap.el --- Built-in package manager bootstrap -*- lexical-binding: t; -*-
 
 ;; -----------------------------------------------------------------------------
-;; Install Elpaca Package manager
-
-(setq inhibit-startup-message t
-      native-comp-async-report-warnings-errors 'silent
-      make-backup-files nil
-      auto-save-default nil
-      create-lockfiles nil)
+;; Use-package configuration
 
 ;; Prefer newer elisp byte-compiled files
 (setq load-prefer-newer t)

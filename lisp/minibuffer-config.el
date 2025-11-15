@@ -4,7 +4,7 @@
 ;; Emacs minibuffer configurations.
 
 (use-package emacs
-  :ensure nil  ;; Don't try to install it
+  :ensure nil
   :custom
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.

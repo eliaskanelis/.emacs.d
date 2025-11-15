@@ -4,7 +4,7 @@
 ;; Print Emacs startup time statistics
 
 (use-package emacs
-  :ensure nil  ;; Don't try to install it
+  :ensure nil
   :init
   (defun print-startup-time ()
     "Print how long Emacs took to start."
@@ -24,18 +24,39 @@
 ;; -----------------------------------------------------------------------------
 
 (use-package emacs
-  :ensure nil  ;; Don't try to install it
+  :ensure nil
   :custom
   ;; Hide commands in M-x which do not work in the current mode.  Vertico
   ;; commands are hidden in normal buffers. This setting is useful beyond
   ;; Vertico.
-  (read-extended-command-predicate #'command-completion-default-include-p))
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  ;; Remove default startup screen.
+  (inhibit-startup-message t)
+  ;; (native-comp-async-report-warnings-errors 'silent)
+  ;; Disables backup files (the ~ files).
+  (make-backup-files nil)
+  ;; Disables auto-saving.
+  (auto-save-default nil)
+  ;; Disables lock files.
+  (create-lockfiles nil)
+
+  ;; Do not blink cursor.
+  (blink-cursor-mode -1)
+  ;; Disable bell.
+  (ring-bell-function 'ignore)
+  ;; Blindly follow symlinks without asking me.
+  (vc-follow-symlinks nil)
+  ;; Change yes-or-no questions into y-or-n questions.
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  ;; Auto refresh file if changed outside.
+  (global-auto-revert-mode t)
+  )
 
 ;; -----------------------------------------------------------------------------
 ;; Persist history over Emacs restarts.
 
 (use-package savehist
-  :ensure nil  ;; Don't try to install it
+  :ensure nil
   :init
   (savehist-mode))
 
@@ -43,7 +64,7 @@
 ;; Window movement
 
 (use-package emacs
-  :ensure nil  ;; Don't try to install it
+  :ensure nil
   :general
   (general-define-key
   ;; Move between windows
