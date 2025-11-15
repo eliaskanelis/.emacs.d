@@ -40,5 +40,23 @@
   (savehist-mode))
 
 ;; -----------------------------------------------------------------------------
+;; Window movement
+
+(use-package emacs
+  :ensure nil  ;; Don't try to install it
+  :general
+  (general-define-key
+  ;; Move between windows
+  "S-<up>"   'windmove-up
+  "S-<down>" 'windmove-down
+  "S-<right>" 'windmove-right
+  "S-<left>" 'windmove-left
+  ;; Swap the windows with each other
+  "M-<up>"   'windmove-swap-states-up
+  "M-<down>" 'windmove-swap-states-down
+  "M-<right>" 'windmove-swap-states-right
+  "M-<left>" 'windmove-swap-states-left))
+
+;; -----------------------------------------------------------------------------
 (provide 'emacs-config)
-;;; emacs-config.el ends here 
+;;; emacs-config.el ends here
