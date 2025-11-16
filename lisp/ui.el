@@ -26,11 +26,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Theme
 
-(use-package monokai-pro-theme
-  :ensure t
-;; -----------------------------------------------------------------------------
-;; Theme
-
 (use-package monokai-theme
   ;; TODO: Until PR is merged
   ;; https://github.com/oneKelvinSmith/monokai-emacs/pull/125
@@ -45,16 +40,16 @@
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
-  
   :config
-  (setq doom-modeline-height 0) ; optional
+  (setq doom-modeline-height 0)
+  (when (display-graphic-p)
   (if (is-font-available-p modeline-font)
       (progn
         (if (facep 'mode-line-active)
             (set-face-attribute 'mode-line-active nil :family modeline-font :height modeline-font-height)
           (set-face-attribute 'mode-line nil :family modeline-font :height modeline-font-height))
         (set-face-attribute 'mode-line-inactive nil :family modeline-font :height modeline-font-height))
-    (error "%s font is not available" modeline-font)))
+      (error "%s font is not available" modeline-font))))
 
 ;; -----------------------------------------------------------------------------
 ;; Looks
