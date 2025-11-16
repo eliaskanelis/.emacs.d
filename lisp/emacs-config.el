@@ -26,6 +26,8 @@
 (use-package emacs
   :ensure nil
   :custom
+  ;; Start in text mode. Not elisp mode.
+  (initial-major-mode 'text-mode)
   ;; Hide commands in M-x which do not work in the current mode.  Vertico
   ;; commands are hidden in normal buffers. This setting is useful beyond
   ;; Vertico.
@@ -68,15 +70,15 @@
   :general
   (general-define-key
   ;; Move between windows
-  "S-<up>"   'windmove-up
-  "S-<down>" 'windmove-down
-  "S-<right>" 'windmove-right
-  "S-<left>" 'windmove-left
+  "C-S-<up>"   'windmove-up
+  "C-S-<down>" 'windmove-down
+  "C-S-<right>" 'windmove-right
+  "C-S-<left>" 'windmove-left
   ;; Swap the windows with each other
-  "M-<up>"   'windmove-swap-states-up
-  "M-<down>" 'windmove-swap-states-down
-  "M-<right>" 'windmove-swap-states-right
-  "M-<left>" 'windmove-swap-states-left))
+  "C-M-<up>"   'windmove-swap-states-up
+  "C-M-<down>" 'windmove-swap-states-down
+  "C-M-<right>" 'windmove-swap-states-right
+  "C-M-<left>" 'windmove-swap-states-left))
 
 ;; -----------------------------------------------------------------------------
 (provide 'emacs-config)

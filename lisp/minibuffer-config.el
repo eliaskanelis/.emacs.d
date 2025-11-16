@@ -23,7 +23,14 @@
   (vertico-count 20) ;; Show that many candidates in one go
   (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :init
-  (vertico-mode))
+  (vertico-mode)
+  :general
+  (general-define-key
+   :keymaps 'vertico-map
+   "<up>" 'vertico-previous
+   "<down>" 'vertico-next
+   "<C-up>" (lambda () (interactive) (dotimes (_ 5) (vertico-previous)))
+   "<C-down>" (lambda () (interactive) (dotimes (_ 5) (vertico-next)))))
 
 ;; -----------------------------------------------------------------------------
 ;; Minibuffer rich annotations
