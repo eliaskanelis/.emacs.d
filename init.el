@@ -26,6 +26,7 @@
 (require 'minibuffer-config)
 (require 'editor)
 (require 'notetaking)
+(require 'programming)
 (require 'sandbox)
 ;; (require 'examples)
 
