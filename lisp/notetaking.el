@@ -22,16 +22,21 @@
 (use-package org
   :ensure t
   :hook (org-mode . org-indent-mode)
+  :custom
+  ;; FIXME: This patch solved org-persist cache problems
+  ;; Emacs 30.2 with org 9.7.11
+  (org-element-use-cache nil)
+  
+  ;; === Display Settings ===
+
+  ;; Show ellipsis with arrow instead of dots
+  (setq org-ellipsis " ")
   :config
   ;; === Word Processor Style Settings ===
   
   ;; Hide emphasis markers (/, *, =, etc.)
   (setq org-hide-emphasis-markers t)
-  
-  ;; Better bullets for list items
-  (font-lock-add-keywords 'org-mode
-    '(("^ +\\([-*]\\) " (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-  
+
   ;; === Header Configuration ===
   
   ;; Use org-bullets for better header appearance
@@ -89,11 +94,6 @@
 
 ;;                                         ))
 ;;               ))
-
-  ;; === Display Settings ===
-  
-  ;; Show ellipsis with arrow instead of dots
-  (setq org-ellipsis " ")
   
   ;; === Source Code Block Settings ===
   
@@ -305,12 +305,12 @@
   ;; yourself.
   ;; If you don't care about startup time, use:
   ;; :hook (after-init . org-roam-ui-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t)
-  (org-roam-ui-follow-mode))
+  :custom
+  (org-roam-ui-sync-theme t)
+  (org-roam-ui-follow t)
+  (org-roam-ui-update-on-save t)
+  (org-roam-ui-open-on-start t)
+  :hook (org-mode . org-roam-ui-follow-mode))
 
 ;; -----------------------------------------------------------------------------
 (provide 'notetaking)
