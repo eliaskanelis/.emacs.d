@@ -30,7 +30,7 @@
   ;; === Display Settings ===
 
   ;; Show ellipsis with arrow instead of dots
-  (setq org-ellipsis " ")
+  (org-ellipsis " ⤵")
   :config
   ;; === Word Processor Style Settings ===
   
@@ -94,7 +94,7 @@
 
 ;;                                         ))
 ;;               ))
-  
+
   ;; === Source Code Block Settings ===
   
   ;; Syntax highlight in code blocks
