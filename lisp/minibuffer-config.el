@@ -1,6 +1,6 @@
 ;;; minibuffer-config.el --- Minibuffer -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Emacs minibuffer configurations.
 
 (use-package emacs
@@ -15,7 +15,7 @@
   (minibuffer-prompt-properties
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Minibuffer completion
 
 (use-package vertico
@@ -32,7 +32,7 @@
    "<C-up>" (lambda () (interactive) (dotimes (_ 5) (vertico-previous)))
    "<C-down>" (lambda () (interactive) (dotimes (_ 5) (vertico-next)))))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Minibuffer rich annotations
 
 (use-package marginalia
@@ -48,7 +48,7 @@
     :keymaps 'minibuffer-local-map
     "M-TAB" '(marginalia-cycle :wk "Cycle annotations")))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Make the completion fuzzy.
 
 (use-package orderless
@@ -58,6 +58,6 @@
   (completion-category-defaults nil) ;; Disable defaults, use our settings
   (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'minibuffer-config)
 ;;; minibuffer-config.el ends here

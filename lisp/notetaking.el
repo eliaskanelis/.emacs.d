@@ -1,10 +1,10 @@
 ;;; notetaking.el --- Note taking -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (setq voidbuffer-org-directory "~/org/")
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (defun voidbuffer:visit-notes ()
   "Visits my notes"
@@ -17,7 +17,7 @@
   (my-keys
     "n" '(voidbuffer:visit-notes :wk "Open notes")))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (use-package org
   :ensure t
@@ -158,7 +158,19 @@
   :config
   (setq org-bullets-bullet-list '("●" "○" "◉" "◎")))
 
-;; -----------------------------------------------------------------------------
+
+;; The TAB key is defined in programming
+;; there is autocompletion after the '<' character.
+(use-package org-block-capf
+  :ensure (:host github :repo "xenodium/org-block-capf" :branch "main")
+  :after org
+  :config
+  (add-hook 'org-mode-hook
+    (lambda ()
+      (add-hook 'completion-at-point-functions
+                #'org-block-capf nil t))))
+
+;; ---------------------------------------------------------------------------
 ;; Zettelkasten
 
 ;; Fast note insertion for a smoother writing flow
@@ -184,6 +196,7 @@
 
 (use-package org-roam
   :ensure t
+  :after treesit
   :commands org-roam db-sync
   :general
   (my-keys
@@ -194,9 +207,9 @@
     "l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
     "i" '(org-roam-node-insert :wk "Insert note")
     "a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")
-    "o" '(org-roam-ui-open :wk "Open UI")
-    "o" '(org-roam-tag-add :wk "Add tag")
-    "o" '(org-roam-tag-remove :wk "Remove tag")
+    "t a" '(org-roam-tag-add :wk "Add tag")
+    "t r" '(org-roam-tag-remove :wk "Remove tag")
+    "u" '(org-roam-ui-open :wk "Open UI")
 	;; ("C-c d t" . '(org-roam-dailies-goto-today :wk "Open today")
 	;; ("C-c d p" . '(org-roam-dailies-goto-previous-note :wk "Go to previous")
 	;; ("C-c d n" . '(org-roam-dailies-goto-next-note :wk "Go to next")
@@ -291,7 +304,7 @@
     (when (file-directory-p org-roam-directory)
       (org-roam-db-autosync-enable)))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Org roam UI
 
 ; Dependency of org-roam-ui
@@ -312,6 +325,6 @@
   (org-roam-ui-open-on-start t)
   :hook (org-mode . org-roam-ui-follow-mode))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'notetaking)
 ;;; notetaking.el ends here

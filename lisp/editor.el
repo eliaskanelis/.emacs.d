@@ -1,6 +1,6 @@
 ;;; editor.el --- Editor configuration -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Sane configs
 
 (use-package emacs
@@ -22,9 +22,13 @@
   (global-subword-mode 1)
   :custom
   ;; Hide the cursor in inactive windows.
-  (cursor-in-non-selected-windows nil))
+  (cursor-in-non-selected-windows nil)
+  ;; Modeline
+  (line-number-mode 1)  ;; Show line numbers in the modeline
+  (column-number-mode 1) ;; Show column number in the modeline
+  (size-indication-mode 1)) ;; Show the file size in the modeline
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Expand region
 
 (use-package expand-region
@@ -34,7 +38,7 @@
     "C-="    'er/expand-region
     "C--"    'er/contract-region))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Move line or selection up or down
 
 (use-package move-text
@@ -44,7 +48,7 @@
     "M-<up>" 'move-text-up
     "M-<down>" 'move-text-down))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Scrolling
 (use-package emacs
   :ensure nil
@@ -54,7 +58,7 @@
   (scroll-conservatively 101)
   (scroll-preserve-screen-position t))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Crux
 
 (use-package crux
@@ -65,6 +69,6 @@
     "k" '(crux-kill-other-buffers :wk "Kill all other buffers")
     "o" '(crux-open-with :wk "Open with external program")))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'editor)
 ;;; editor.el ends here

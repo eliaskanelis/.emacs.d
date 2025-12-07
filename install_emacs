@@ -1,14 +1,14 @@
 #!/bin/sh
 #
-# Script Name: install_eamcs.sh
+# Script Name: install_emacs.sh
 #
 # Description: Script that installs Emacs.
 #
 # Author: Kanelis Elias (e.kanelis@voidbuffer.com)
 # Date: 2023/12/26
 #
-# Usage: ./install_eamcs.sh
-#        ./install_eamcs.sh X.Y
+# Usage: ./install_emacs.sh
+#        ./install_emacs.sh X.Y
 #
 # -----------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ die() {
 #
 
 # Mirror and version selection
-EMACS_VERSION="${*:-29.4}"
+EMACS_VERSION="${*:-30.2}"
 MIRROR="ftp.cc.uoc.gr/mirrors/gnu/emacs/"
 TAR="emacs-${EMACS_VERSION}.tar.xz"
 OUTPUT_PATH="$(mktemp -d /tmp/emacs-XXXXXX)"
@@ -66,7 +66,8 @@ case "${ID}" in
                   libgnutls28-dev \
                   libtinfo-dev \
                   libncurses5-dev \
-                  libjansson4 libjansson-dev"
+                  libjansson4 libjansson-dev \
+                  libtree-sitter-dev"
         sudo apt-get update && sudo apt-get install -y ${PACKAGES}
         ;;
     alpine)
@@ -77,7 +78,8 @@ case "${ID}" in
                   tiff-dev \
                   gnutls-dev \
                   ncurses-dev \
-                  jansson-dev"
+                  jansson-dev \
+                  tree-sitter-dev tree-sitter"
         sudo apk update && sudo apk add --no-cache ${PACKAGES}
         ;;
     *)
@@ -100,7 +102,7 @@ cd "${FILENAME}" || { echo "Failed to cd into ${FILENAME}"; exit 1; }
 
 # Build and install
 ./autogen.sh
-./configure
+./configure --with-tree-sitter
 make
 sudo make install
 

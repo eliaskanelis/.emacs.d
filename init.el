@@ -1,40 +1,61 @@
-;;; init.el --- entry point -*- lexical-binding: t; -*-
+;;; init.el --- Emacs entry point -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
-;; Bootstrap
+;;; Commentary:
+;; Bootstraps package management, loads modular config, and stores all
+;; generated files to cache dir.
+;;; Code:
 
-;; Prevent customisations to the end of this file.
+;; ---------------------------------------------------------------------------
+;; Environment setup
+
+;; Redirect Emacs' generated files (backups, auto-saves, etc.) to cache dir.
+(setq init-el-directory user-emacs-directory)
+(setq user-emacs-directory "~/.cache/emacs/")
+
+;; Prevent customizations from polluting files
 (setq custom-file "/dev/null")
 
-;; Add config directory to load-path
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; Add my lisp/ directory to the load-path.
+(add-to-list 'load-path (expand-file-name "lisp" init-el-directory))
 
-;; Put the generated files in the cache directory
-(setq init-el-directory user-emacs-directory)
-(setq user-emacs-directory "~/.cache/emacs")
+;; ---------------------------------------------------------------------------
+;; Bootstrap package manager
 
-;; Load modules
-
-;; We select elpaca
 (require 'elpaca-bootstrap)
-;; (require 'use-package-bootstrap)
+;; (require 'use-package-bootstrap)  ; alternative
 
+;; ---------------------------------------------------------------------------
+;; File management and cleanup
+(use-package no-littering
+  :ensure t
+  :config
+  ;; Redirect auto-save files
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  ;; Optional: redirect backup files
+  (setq backup-directory-alist
+        `((".*" . ,(no-littering-expand-var-file-name "backup/")))))
+
+;; ---------------------------------------------------------------------------
+;; Core modules
 (require 'general-bootstrap)
+
+;; ---------------------------------------------------------------------------
+;; Load modular configuration
 
 (require 'emacs-config)
 (require 'voidbuffer)
 (require 'minibuffer-config)
 (require 'editor)
 (require 'notetaking)
-(require 'programming)
+;; (require 'programming)
 (require 'sandbox)
 ;; (require 'examples)
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Custom configuration
 
 (require 'ui)
 
-;;------------------------------------------------------------------------------
-;; End of init.el
-;;
+;; ---------------------------------------------------------------------------
+;;; init.el ends here

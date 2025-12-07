@@ -1,6 +1,6 @@
 ;;; emacs-config.el --- Emacs configuration -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Print Emacs startup time statistics
 
 (use-package emacs
@@ -16,12 +16,12 @@
              gcs-done))
   (add-hook 'emacs-startup-hook #'print-startup-time))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Print on hook invocation
 
 (add-hook 'emacs-startup-hook (lambda () (log "[HOOK] emacs-startup-hook!")))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (use-package emacs
   :ensure nil
@@ -54,7 +54,7 @@
   (global-auto-revert-mode t)
   )
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Persist history over Emacs restarts.
 
 (use-package savehist
@@ -62,7 +62,7 @@
   :init
   (savehist-mode))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Window movement
 
 (use-package emacs
@@ -80,6 +80,16 @@
   "C-M-<right>" 'windmove-swap-states-right
   "C-M-<left>" 'windmove-swap-states-left))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
+;; Tree-sitter (built-in)
+
+(use-package treesit
+  :ensure nil
+  :init
+  (unless (boundp 'treesit-extra-load-path)
+    (defvar treesit-extra-load-path nil
+      "Extra paths for Tree-sitter grammars.")))
+
+;; ---------------------------------------------------------------------------
 (provide 'emacs-config)
 ;;; emacs-config.el ends here

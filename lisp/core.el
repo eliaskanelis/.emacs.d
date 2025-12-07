@@ -1,6 +1,6 @@
 ;;; core.el --- Core utilities -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (defun log (fmt &rest args)
   "Append a formatted message to /dev/stdout or a file."
@@ -13,7 +13,7 @@
 				'append   ;; append
 				0)))      ;; suppress "Added to …" message
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (defun is-windows-p () (eq system-type 'windows-nt))
 (defun is-linux-p ()   (eq system-type 'gnu/linux))
@@ -26,6 +26,6 @@
   "Return t if font NAME exists on the system."
   (not (null (find-font (font-spec :name name)))))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'core)
 ;;; core.el ends here

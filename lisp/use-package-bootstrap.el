@@ -1,6 +1,6 @@
 ;;; use-package-bootstrap.el --- Built-in package manager bootstrap -*- lexical-binding: t; -*-
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Use-package configuration
 
 ;; Prefer newer elisp byte-compiled files
@@ -24,6 +24,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'use-package-bootstrap)
 ;;; use-package-bootstrap.el ends here

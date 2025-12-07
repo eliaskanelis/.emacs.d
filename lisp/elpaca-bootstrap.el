@@ -4,7 +4,7 @@
 
 (require 'core)
 
-;; ---------------------------------------------------------------------------
+;; -------------------------------------------------------------------------
 ;; Prefer stable repositories
 
 (setq elpaca-repos
@@ -14,7 +14,7 @@
 
 		;; ("melpa-stable" . "https://stable.melpa.org/packages/")
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 ;; Install Elpaca Package manager
 
 (defvar elpaca-installer-version 0.11)
@@ -23,7 +23,7 @@
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil :depth 1 :inherit ignore
-							  ;; Additionally installed extensions
+							                ;; Additionally installed extensions
                               :files (:defaults "elpaca-test.el" "extensions/*")
                               :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
@@ -56,11 +56,6 @@
     (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
 (add-hook 'after-init-hook #'elpaca-process-queues)
 
-;; Additionally log
-(add-hook 'elpaca-after-init-hook
-          (lambda ()
-            (log "Elpaca finished initializing.")))
-
 ;; Windows does not support symlinks
 (when (is-windows-p)
   ;; https://www.howtogeek.com/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/
@@ -72,17 +67,51 @@
 (setq use-package-always-ensure t
       use-package-always-ensure-function #'elpaca)
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 ;; Make `use-package` forms use Elpaca by default
 (with-eval-after-load 'elpaca
   (elpaca-use-package-mode))
 
+;; ---------------------------------------------------------------------------
+;; Lockfile configuration for deterministic package versions
+;; WARNING: Additional config
+
+;; Set custom lockfile path
+;; MEMO: This should be included in version control.
+(setq elpaca-lock-file (expand-file-name "elpaca-lock.el" init-el-directory))
+
+;; Use lockfile if it exists, otherwise fall back to default repositories
+;; This allows first-time setup to work, then subsequent runs use locked versions
+(setq elpaca-menu-functions
+      (if (file-exists-p elpaca-lock-file)
+          (progn
+            (log "Loading elpaca lockfile from %s" elpaca-lock-file)
+            '(elpaca-menu-lock-file))
+        elpaca-menu-functions))  ;; Keep default menu functions on first run
+
+
+;; Load lockfile if it exists, then write it after init completes
+(add-hook 'elpaca-after-init-hook
+          (lambda ()
+            (elpaca-wait)  ;; ensure all builds finish
+            (elpaca-write-lock-file elpaca-lock-file) ;; Write updated lockfile
+            (log "Wrote elpaca lockfile to %s" elpaca-lock-file)))
+
+;; ---------------------------------------------------------------------------
+;; Helper command to regenerate lockfile
+(defun voidbuffer:elpaca-regenerate-lockfile ()
+  "Regenerate the elpaca lockfile with current package versions."
+  (interactive)
+  (elpaca-write-lock-file elpaca-lock-file)
+  (message "Elpaca lockfile regenerated at %s" elpaca-lock-file))
+
+;; ---------------------------------------------------------------------------
 ;; TODO: Is this needed?
 ;; Block until current queue processed.
 ;; (elpaca-wait)
 ;; (log "Elpaca unblocked.")
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 (provide 'elpaca-bootstrap)
 ;;; elpaca-bootstrap.el ends here

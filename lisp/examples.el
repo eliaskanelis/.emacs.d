@@ -2,13 +2,13 @@
 
 (require 'core)
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 ;; (use-package emacs
 ;;  :ensure nil
 ;;  :after (vertico marginalia))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 ;; (defun my-file-git-annotator (file)
 ;;   "Annotate FILE with Git status."
@@ -25,7 +25,7 @@
 ;; (add-to-list 'marginalia-annotators
 ;;              '(file my-file-git-annotator marginalia-annotate-file builtin none))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (use-package embark
   :ensure t
@@ -82,14 +82,14 @@
          ("C-c ," . smart-jump-back)
          ("C-c ?" . smart-jump-references)))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (require 'server)
 (unless (server-running-p)
     (log "Starting server")
     (server-start))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (when (is-linux-p)
   (log "Linux-specific feature enabled"))
@@ -109,7 +109,7 @@
     (log "Git is available")
   (log "Git is not installed"))
 
-;; (unless (executable-find "gitas")
+;; (unless (executable-find "git")
 ;;   (log "Git is required, exiting...")
 ;;   (kill-emacs 1))
 
@@ -117,12 +117,12 @@
     (log "Found font")
   (log "Could not find font"))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 ;; ;; Load the rest from a modular config
 ;; (load (expand-file-name "config.el" user-emacs-directory) t)
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 ;; (use-package mock-package
 ;;   :init
@@ -141,19 +141,6 @@
 ;; ;; Set the garbage collection early to load faster.
 ;; ;; We will set it back at the end of the init.el
 ;; (setq gc-cons-threshold (* 50 1000 1000))
-
-;; ;; ----------------------------------------------------------------------------
-
-;; ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
-;; ;; reliably, set `user-emacs-directory` before loading no-littering!
-
-;; (use-package no-littering
-;;   :ensure t
-;;   :config
-;;   ;; no-littering doesn't set this by default so we must place
-;;   ;; auto save files in the same path as it uses for sessions
-;;   (setq auto-save-file-name-transforms
-;; 	`((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
 ;;------------------------------------------------------------------------------
 
@@ -182,11 +169,11 @@
 ;; Load the main function
 ;; (my/load-custom-config "config.org")
 
-;; ;; ----------------------------------------------------------------------------
+;; ;; ---------------------------------------------------------------------------
 ;; ;; Make gc pauses faster by decreasing the threshold.
 ;; (setq gc-cons-threshold (* 2 1000 1000))
 
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------------
 
 (provide 'examples)
 ;;; examples.el ends here
