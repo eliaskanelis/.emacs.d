@@ -1,4 +1,4 @@
-;;; init.el --- Emacs entry point -*- lexical-binding: t; -*-
+ ;;; init.el --- Emacs entry point -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;; Bootstraps package management, loads modular config, and stores all
@@ -47,8 +47,9 @@
 (require 'voidbuffer)
 (require 'minibuffer-config)
 (require 'editor)
+(require 'version-control)
 (require 'notetaking)
-;; (require 'programming)
+(require 'programming)
 (require 'sandbox)
 ;; (require 'examples)
 

@@ -12,6 +12,9 @@
         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
         ("melpa"  . "https://melpa.org/packages/")))
 
+(setq elpaca-use-package-by-default t)
+(setq elpaca-queue-limit 10)
+
 		;; ("melpa-stable" . "https://stable.melpa.org/packages/")
 
 ;; ---------------------------------------------------------------------------
