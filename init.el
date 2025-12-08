@@ -50,6 +50,7 @@
 (require 'version-control)
 (require 'notetaking)
 (require 'programming)
+(require 'utilities)
 (require 'sandbox)
 ;; (require 'examples)
 

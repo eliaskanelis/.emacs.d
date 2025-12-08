@@ -143,6 +143,18 @@
 	      :source "elpaca-menu-lock-file" :protocol https :inherit
 	      t :depth treeless :ref
 	      "931b6d0667fe03e7bf1c6c282d6d8d7006143c52"))
+ (fzf :source "elpaca-menu-lock-file" :recipe
+      (:package "fzf" :repo "bling/fzf.el" :fetcher github :files
+		("*.el" "*.el.in" "dir" "*.info" "*.texi" "*.texinfo"
+		 "doc/dir" "doc/*.info" "doc/*.texi" "doc/*.texinfo"
+		 "lisp/*.el" "docs/dir" "docs/*.info" "docs/*.texi"
+		 "docs/*.texinfo"
+		 (:exclude ".dir-locals.el" "test.el" "tests.el"
+			   "*-test.el" "*-tests.el" "LICENSE"
+			   "README*" "*-pkg.el"))
+		:source "elpaca-menu-lock-file" :protocol https
+		:inherit t :depth treeless :ref
+		"641aef33c88df3733f13d559bcb2acc548a4a0c3"))
  (general :source "elpaca-menu-lock-file" :recipe
 	  (:package "general" :fetcher github :repo
 		    "noctuid/general.el" :files
@@ -352,7 +364,7 @@
 		(:defaults ("etc/styles/" "etc/styles/*" "doc/*.texi"))
 		:source "elpaca-menu-lock-file" :protocol https
 		:inherit t :ref
-		"67906ac56b9475a3ef5addaab1e4a3033f3c963b"))
+		"9d128ebbc88978f65095d47361b4ec71b91d340d"))
  (org-block-capf :source "elpaca-menu-lock-file" :recipe
 		 (:source "elpaca-menu-lock-file" :protocol https
 			  :inherit t :depth treeless :host github
