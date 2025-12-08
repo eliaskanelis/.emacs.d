@@ -13,7 +13,7 @@
 		  "31cb2fea8f4bc7a593acd76187a89075d8075500"))
  (browse-at-remote :source "elpaca-menu-lock-file" :recipe
 		   (:package "browse-at-remote" :repo
-			     "rmuslimov/browse-at-remote" :fetcher
+			     "eliaskanelis/browse-at-remote" :fetcher
 			     github :files
 			     ("*.el" "*.el.in" "dir" "*.info" "*.texi"
 			      "*.texinfo" "doc/dir" "doc/*.info"
@@ -25,8 +25,9 @@
 					"*-tests.el" "LICENSE"
 					"README*" "*-pkg.el"))
 			     :source "elpaca-menu-lock-file" :protocol
-			     https :inherit t :depth treeless :ref
-			     "cf0269f3db9e968c819b1d85b33d791c20c2e495"))
+			     https :inherit t :depth treeless :host
+			     github :ref
+			     "6b16ad86da361cce07518f2469d11def5fd520ca"))
  (cond-let
    :source "elpaca-menu-lock-file" :recipe
    (:package "cond-let" :fetcher github :repo "tarsius/cond-let"

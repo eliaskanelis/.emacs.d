@@ -87,12 +87,15 @@
 ;; Browse at remote
 
 (use-package browse-at-remote
-  :ensure t
+  :ensure (:host github :repo "eliaskanelis/browse-at-remote")
   :general
   (my-keys
     "g r" '(browse-at-remote :wk "Browse at remote"))
-  :custom
-  (browse-at-remote-default-type 'github))
+  :config
+  ;; Tell browse-at-remote that kentavros.lan uses Gitea
+  (add-to-list 'browse-at-remote-remote-type-regexps
+               '(:host "kentavros\\.lan$" :type "gitea" :actual-host "git.kentavros.lan"))
+  )
 
 ;; ---------------------------------------------------------------------------
 (provide 'version-control)
