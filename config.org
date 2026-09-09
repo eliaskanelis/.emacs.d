@@ -6,23 +6,88 @@
 #+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 [[./img/screen.png]]
 
-* Basic
-Load [[./config/basic.org]]
-#+begin_src elisp
-  (my/load-custom-config "config/basic.org")
+* Install
+
+Clone anywhere Emacs looks for its init file, e.g.
+
+#+begin_src sh
+  git clone <this repo> ~/.config/emacs
 #+end_src
-* Org mode
-Load [[./config/org-mode.org]]
-#+begin_src elisp
-  (my/load-custom-config "config/org-mode.org")
+
+On first start Elpaca clones itself and every package listed in
+=elpaca-lock.el=, at the exact commit recorded there.
+
+* Layout
+
+| File                    | Purpose                                            |
+|-------------------------+----------------------------------------------------|
+| =early-init.el=         | Disables =package.el=. =EMACS_DEBUG=1= for debugging. |
+| =init.el=               | Entry point. Loads every module in =lisp/=.          |
+| =lisp/core.el=          | =vb/log= and platform predicates.                    |
+| =lisp/elpaca-bootstrap.el= | Package manager + lock file.                    |
+| =lisp/general-bootstrap.el= | =C-c= / =C-z= / =C-,= leader keys.                |
+| =lisp/*.el=             | One module per topic, all =require='d from =init.el=. |
+| =elpaca-lock.el=        | Pinned package commits. Under version control.     |
+
+Generated files (backups, auto-saves, package builds) go to =~/.cache/emacs/=,
+never into this repository. That path is deliberately fixed and does not follow
+=XDG_CACHE_HOME=: honouring it would relocate an existing install and orphan the
+old package tree.
+
+* Reproducible installs
+
+Package versions come from =elpaca-lock.el=, which =elpaca-menu-lock-file=
+consults before any package archive.
+
+- *No lock file* (first install, or you deleted it): everything resolves from
+  the package menus, and the resulting versions are recorded once. Commit it.
+- *Lock file present*: every package is checked out at its pinned commit.
+  Nothing at startup writes to an existing lock file, so a fresh clone
+  reproduces the exact package set of the last commit.
+- *Updating*: =M-x vb/elpaca-update= moves the lock file aside and leaves a
+  marker, then restarts Emacs. The restart *deletes* the package tree,
+  reinstalls everything at current versions and records a new lock file to
+  review and commit. The previous lock file is kept as =elpaca-lock.el.old=;
+  the packages themselves are not recoverable, they are re-downloaded.
+
+Updating cannot happen in place. Packages installed from the lock file are
+checked out at an exact commit in detached HEAD, so =elpaca-merge-all= has no
+upstream to fast-forward, and =elpaca-fetch-all= skips them all because a
+=:ref= counts as pinned. Reinstalling is the whole mechanism, and it
+re-downloads every package.
+
+Elpaca itself bootstraps before the lock file applies: the installer clones
+=elpaca-order= directly, with =:ref nil=, so it tracks upstream HEAD no matter
+what the lock file says. The lock does carry an =elpaca= entry, but it is
+inert -- nothing reads it. Elpaca is therefore the one package this repository
+does not pin.
+
+Its =elpaca-use-package= extension is different: it is requested as an ordinary
+order, so it resolves through the menus like any other package and *is* pinned
+by the lock file.
+
+* Docker
+
+=make run= starts the image with the host's X socket. Grant it access first,
+and revoke it afterwards:
+
+#+begin_src sh
+  xhost +local:
+  make run
+  xhost -local:
 #+end_src
-* Programming
-Load [[./config/programming.org]]
-#+begin_src elisp
-  ;;(my/load-custom-config "config/programming.org")
-#+end_src
-* Experiments
-Load [[./config/experiments.org]]
-#+begin_src elisp
-  ;;(my/load-custom-config "config/experiments.org")
-#+end_src
+
+The container runs as its own user, so no cookie is forwarded. Note that
+=xhost +local:= opens the display to every local user for as long as it is in
+effect -- fine on a single-user desktop, not on a shared host.
+
+* Test
+
+=./test-startup.sh= loads =early-init.el= and =init.el= in batch mode and
+processes the Elpaca queue. Non-zero exit means the configuration is broken.
+=make build= runs the same check inside the Docker image.
+
+* Archive
+
+=config/*.org= is the previous, literate version of this configuration. It is
+not loaded by =init.el= and is kept for reference only.

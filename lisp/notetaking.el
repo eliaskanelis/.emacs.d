@@ -2,20 +2,32 @@
 
 ;; ---------------------------------------------------------------------------
 
-(setq voidbuffer-org-directory "~/org/")
+(defvar voidbuffer-org-directory "~/org/"
+  "Root directory of my org files.")
+
+;; Templates ship with this repository; resolve them relative to it instead of
+;; hardcoding ~/.config/emacs, which breaks any checkout kept elsewhere.
+(defvar voidbuffer-org-roam-default-template
+  (expand-file-name "templates/org-roam/default.org" init-el-directory))
+(defvar voidbuffer-org-roam-daily-template
+  (expand-file-name "templates/org-roam/daily.org" init-el-directory))
 
 ;; ---------------------------------------------------------------------------
 
 (defun voidbuffer:visit-notes ()
-  "Visits my notes"
+  "Visit my notes file."
   (interactive)
-  (find-file (concat voidbuffer-org-directory "notes.org")))
+  (find-file (expand-file-name "notes.org" voidbuffer-org-directory)))
 
+;; Bound outside the org-roam declaration: Elpaca defers a package's whole
+;; use-package body until that package builds, and opening a plain file must
+;; not depend on org-roam installing.
 (use-package emacs
   :ensure nil
   :general
   (my-keys
-    "n" '(voidbuffer:visit-notes :wk "Open notes")))
+    "n" '(:ignore t :wk "notes")
+    "n n" '(voidbuffer:visit-notes :wk "Open notes")))
 
 ;; ---------------------------------------------------------------------------
 
@@ -26,24 +38,24 @@
   ;; FIXME: This patch solved org-persist cache problems
   ;; Emacs 30.2 with org 9.7.11
   (org-element-use-cache nil)
-  
+
   ;; === Display Settings ===
 
   ;; Show ellipsis with arrow instead of dots
   (org-ellipsis " ⤵")
   :config
   ;; === Word Processor Style Settings ===
-  
+
   ;; Hide emphasis markers (/, *, =, etc.)
   (setq org-hide-emphasis-markers t)
 
   ;; === Header Configuration ===
-  
+
   ;; Use org-bullets for better header appearance
-  ;; (let* ((variable-tuple 
-  ;;          (cond 
+  ;; (let* ((variable-tuple
+  ;;          (cond
   ;;            ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-  ;;            (nil (warn "Cannot find a Sans Serif font. Install Source Sans Pro."))))
+  ;;            (nil (warn "Cannot find a Sans Serif font.  Install Source Sans Pro."))))
   ;;        (base-font-color (face-foreground 'default nil 'default))
   ;;        (headline `(:inherit default :weight bold :foreground ,base-font-color)))
   ;;   (custom-theme-set-faces 'user
@@ -96,18 +108,18 @@
 ;;               ))
 
   ;; === Source Code Block Settings ===
-  
+
   ;; Syntax highlight in code blocks
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
   (setq org-src-window-setup 'current-window)
   (setq org-src-preserve-indentation t)
-  
+
   ;; Prettier code block delimiters
   (setq org-fontify-whole-block-delimiter-line t)
-  
+
   ;; === Babel (Code Execution) Settings ===
-  
+
   (setq org-confirm-babel-evaluate nil)
   (setq org-babel-results-keyword "results")
   (setq org-babel-default-inline-header-args
@@ -122,7 +134,7 @@
       (:hlines . "no")
       (:tangle . "no")
       (:padnewline . "yes")))
-  
+
   ;; Enable code execution for multiple languages
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -132,12 +144,12 @@
      (sqlite . t)
      (R . t)
      (ruby . t)))
-  
+
   ;; === Export Settings ===
-  
+
   (setq org-export-with-smart-quotes t)
   (setq org-cycle-include-plain-lists 'integrate)
-  
+
   ;; === Keybindings ===
   :general
   (my-keys
@@ -186,7 +198,14 @@
 ;; This will allow you to quickly create new notes for topics you’re mentioning
 ;; while writing so that you can go back later and fill those notes in with
 ;; more details!
+;; Declared special so the `let' below is a dynamic binding.  Without this the
+;; defun is evaluated before org-roam loads, the binding is lexical, and
+;; `org-roam-node-insert' never sees the :immediate-finish override.
+(defvar org-roam-capture-templates)
+
 (defun voidbuffer:org-roam-node-insert-immediate (arg &rest args)
+  "Insert a link to a new org-roam node without opening it.
+ARG and ARGS are passed through to `org-roam-node-insert'."
   (interactive "P")
   (let ((args (cons arg args))
         (org-roam-capture-templates (list (append (car org-roam-capture-templates)
@@ -196,20 +215,22 @@
 
 (use-package org-roam
   :ensure t
-  :after treesit
   :commands org-roam db-sync
   :general
+  ;; Everything roam lives under `C-c n'.  Binding bare "f"/"v"/"l"/"i"/"t"
+  ;; here shadowed the C-c f (file) and C-c b (buffer) prefixes from
+  ;; general-bootstrap.el, which silently broke those menus.
   (my-keys
-    "f" '(org-roam-node-find :wk "List my atomic notes")
-    "v" '(org-roam-node-random :wk "Open a random note"))
+    "n f" '(org-roam-node-find :wk "List my atomic notes")
+    "n v" '(org-roam-node-random :wk "Open a random note"))
   (my-keys
     :keymaps '(org-mode-map org-agenda-mode-map)
-    "l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
-    "i" '(org-roam-node-insert :wk "Insert note")
-    "a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")
-    "t a" '(org-roam-tag-add :wk "Add tag")
-    "t r" '(org-roam-tag-remove :wk "Remove tag")
-    "u" '(org-roam-ui-open :wk "Open UI")
+    "n l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
+    "n i" '(org-roam-node-insert :wk "Insert note")
+    "n a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")
+    "n t a" '(org-roam-tag-add :wk "Add tag")
+    "n t r" '(org-roam-tag-remove :wk "Remove tag")
+    "n u" '(org-roam-ui-open :wk "Open UI")
 	;; ("C-c d t" . '(org-roam-dailies-goto-today :wk "Open today")
 	;; ("C-c d p" . '(org-roam-dailies-goto-previous-note :wk "Go to previous")
 	;; ("C-c d n" . '(org-roam-dailies-goto-next-note :wk "Go to next")
@@ -252,23 +273,24 @@
           (concat "${type:15} ${title:60} " (propertize "${tags:20}" 'face 'org-tag)))
 
     ;; My templates for new notes
+    ;; Backquoted: the template paths are variables, not literals.
     (setq org-roam-capture-templates
-          '(
+          `(
             ("f" "fleeting" plain
-             (file "~/.config/emacs/templates/org-roam/default.org")
+             (file ,voidbuffer-org-roam-default-template)
              :if-new (file+head "fleeting/%<%Y-%m-%d_%H:%M:%S>-${slug}.org" "#+title: ${title}\n#+filetags: :draft:\n")
              :unnarrowed t)
             ("p" "persistent" plain
-             (file "~/.config/emacs/templates/org-roam/default.org")
+             (file ,voidbuffer-org-roam-default-template)
              :if-new (file+head "persistent/%<%Y-%m-%d_%H:%M:%S>-${slug}.org" "#+title: ${title}\n#+filetags: :draft:\n")
              :unnarrowed t)
             ("b" "blog post" plain
-             (file "~/.config/emacs/templates/org-roam/default.org")
+             (file ,voidbuffer-org-roam-default-template)
              :if-new (file+head "blog/%<%Y>/%<%m>/${slug}.org" "#+title: ${title}\n#+filetags: :draft:\n")
              :immediate-finish t
              :unnarrowed t)
             ("l" "literature" plain
-             (file "~/.config/emacs/templates/org-roam/default.org")
+             (file ,voidbuffer-org-roam-default-template)
              :if-new (file+head "literature/${title}.org" "#+title: ${title}\n#+filetags: :draft:\n")
              :immediate-finish t
              :unnarrowed t)
@@ -276,10 +298,10 @@
 
     ;; Template for org-roam dailies.
     (setq org-roam-dailies-capture-templates
-          '(
+          `(
             ;; TODO: There is a bug with reading the template file.
             ("d" "default" entry
-             (file "~/.config/emacs/templates/org-roam/daily.org")
+             (file ,voidbuffer-org-roam-daily-template)
              :target (file+head "%<%Y-%m-%d>.org"
                                 "#+title: %<%Y-%m-%d>\n"))
             ))
@@ -302,7 +324,7 @@
     ;;(org-roam-setup)
     ;; Update the database only if the org roam directory exists
     (when (file-directory-p org-roam-directory)
-      (org-roam-db-autosync-enable)))
+      (org-roam-db-autosync-mode 1)))
 
 ;; ---------------------------------------------------------------------------
 ;; Org roam UI

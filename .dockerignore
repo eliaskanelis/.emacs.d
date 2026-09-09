@@ -12,3 +12,8 @@
 LICENSE
 README.md
 Makefile
+
+# Ignore byte-compiled output: Emacs loads init/early-init without an
+# extension and `load-prefer-newer' is nil, so a stale .elc would shadow the .el
+# baked into the image.
+**/*.elc

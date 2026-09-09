@@ -7,9 +7,10 @@
 ;; ---------------------------------------------------------------------------
 ;; We need git
 
+;; Elpaca already needs git to have got this far, so this is only a diagnostic.
+;; Killing Emacs here would leave the user with no way to fix the problem.
 (unless (executable-find "git")
-  (log "Git is required, exiting...")
-  (kill-emacs 1))
+  (warn "Git not found in `exec-path'; magit and elpaca will not work"))
 
 ;; ---------------------------------------------------------------------------
 ;; Version control diff highlighter
@@ -19,7 +20,7 @@
   :hook ((prog-mode . diff-hl-mode)
          (text-mode . diff-hl-mode)
          (dired-mode . diff-hl-dired-mode)
-         (magit-pre-refresh . diff-hl-magit-pre-refresh)
+         ;; diff-hl-magit-pre-refresh became an alias for `ignore' in 1.11.0.
          (magit-post-refresh . diff-hl-magit-post-refresh))
   :config
   ;; Show diff indicators in the left fringe

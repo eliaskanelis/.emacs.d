@@ -2,25 +2,34 @@
 
 ;; ---------------------------------------------------------------------------
 
-(defun log (fmt &rest args)
-  "Append a formatted message to /dev/stdout or a file."
-  (with-temp-buffer
-    (insert (format-time-string "[%F %T] "))
-    (insert (apply #'format fmt args))
-    (insert "\n")
-	(write-region (point-min) (point-max)
-				"/dev/stdout"
-				'append   ;; append
-				0)))      ;; suppress "Added to …" message
+(defun vb/log (fmt &rest args)
+  "Write FMT formatted with ARGS, plus a timestamp, to stderr.
+Deliberately bypasses `message' so these lines stay out of *Messages*.
+Writing to \"/dev/stdout\" would signal `file-error' on Windows, which this
+configuration supports."
+  (princ (concat (format-time-string "[%F %T] ")
+                 (apply #'format fmt args)
+                 "\n")
+         #'external-debugging-output))
 
 ;; ---------------------------------------------------------------------------
 
-(defun is-windows-p () (eq system-type 'windows-nt))
-(defun is-linux-p ()   (eq system-type 'gnu/linux))
-(defun is-mac-p ()     (eq system-type 'darwin))
+(defun is-windows-p ()
+  "Return non-nil on Microsoft Windows."
+  (eq system-type 'windows-nt))
+(defun is-linux-p ()
+  "Return non-nil on GNU/Linux."
+  (eq system-type 'gnu/linux))
+(defun is-mac-p ()
+  "Return non-nil on macOS."
+  (eq system-type 'darwin))
 
-(defun is-gui-p () (display-graphic-p))
-(defun is-cli-p () (not (display-graphic-p)))
+(defun is-gui-p ()
+  "Return non-nil on a graphical display."
+  (display-graphic-p))
+(defun is-cli-p ()
+  "Return non-nil on a terminal display."
+  (not (display-graphic-p)))
 
 (defun is-font-available-p (name)
   "Return t if font NAME exists on the system."

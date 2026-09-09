@@ -189,8 +189,8 @@
 ;;          ("C-c g" . consult-grep)))
 
 ;; (use-package codemetrics
-;;   :ensure (codemetrics 
-;;            :host github 
+;;   :ensure (codemetrics
+;;            :host github
 ;;            :repo "jcs-elpa/codemetrics")
 ;;   :config
 ;;   (setq codemetrics-enable t)

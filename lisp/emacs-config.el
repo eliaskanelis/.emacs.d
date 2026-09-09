@@ -8,7 +8,7 @@
   :init
   (defun print-startup-time ()
     "Print how long Emacs took to start."
-    (log "Emacs loaded in %.3f seconds with %d garbage collections."
+    (vb/log "Emacs loaded in %.3f seconds with %d garbage collections."
          (float-time (time-subtract after-init-time before-init-time))
          gcs-done)
     (message "Emacs loaded in %.3f seconds with %d garbage collections."
@@ -19,7 +19,7 @@
 ;; ---------------------------------------------------------------------------
 ;; Print on hook invocation
 
-(add-hook 'emacs-startup-hook (lambda () (log "[HOOK] emacs-startup-hook!")))
+(add-hook 'emacs-startup-hook (lambda () (vb/log "[HOOK] emacs-startup-hook!")))
 
 ;; ---------------------------------------------------------------------------
 
@@ -34,25 +34,23 @@
   (read-extended-command-predicate #'command-completion-default-include-p)
   ;; Remove default startup screen.
   (inhibit-startup-message t)
-  ;; (native-comp-async-report-warnings-errors 'silent)
   ;; Disables backup files (the ~ files).
   (make-backup-files nil)
   ;; Disables auto-saving.
   (auto-save-default nil)
   ;; Disables lock files.
   (create-lockfiles nil)
-
-  ;; Do not blink cursor.
-  (blink-cursor-mode -1)
   ;; Disable bell.
   (ring-bell-function 'ignore)
   ;; Blindly follow symlinks without asking me.
-  (vc-follow-symlinks nil)
-  ;; Change yes-or-no questions into y-or-n questions.
-  (defalias 'yes-or-no-p 'y-or-n-p)
+  (vc-follow-symlinks t)
+  ;; Turn yes-or-no questions into y-or-n questions.
+  (use-short-answers t)
+  :config
+  ;; Do not blink cursor.
+  (blink-cursor-mode -1)
   ;; Auto refresh file if changed outside.
-  (global-auto-revert-mode t)
-  )
+  (global-auto-revert-mode 1))
 
 ;; ---------------------------------------------------------------------------
 ;; Persist history over Emacs restarts.
@@ -79,16 +77,6 @@
   "C-M-<down>" 'windmove-swap-states-down
   "C-M-<right>" 'windmove-swap-states-right
   "C-M-<left>" 'windmove-swap-states-left))
-
-;; ---------------------------------------------------------------------------
-;; Tree-sitter (built-in)
-
-(use-package treesit
-  :ensure nil
-  :init
-  (unless (boundp 'treesit-extra-load-path)
-    (defvar treesit-extra-load-path nil
-      "Extra paths for Tree-sitter grammars.")))
 
 ;; ---------------------------------------------------------------------------
 (provide 'emacs-config)

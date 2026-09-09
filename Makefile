@@ -10,7 +10,12 @@ MAKEFLAGS += --no-builtin-rules
 # XServer authentication
 
 XSOCK=/tmp/.X11-unix
-XCOOKIE=$(shell xauth list)
+# X access is left to the host: run "xhost +local:" before "make run", and
+# "xhost -local:" afterwards.  Note that +local: grants every local uid full
+# access to the display, which is wider than a forwarded cookie -- it is fine
+# on a single-user desktop, not on a shared host.  Forwarding a cookie instead
+# needs a world-readable copy in /tmp or a uid match with the container, and
+# neither can be verified without an X server, so this makefile does not try.
 
 # -----------------------------------------------------------------------------
 # Validations
@@ -21,7 +26,7 @@ $(error "Please install 'docker'!")
 endif
 
 GIT_EXISTS := $(shell command -v git 2> /dev/null)
-ifndef DOCKER_EXISTS
+ifndef GIT_EXISTS
 $(error "Please install 'git'!")
 endif
 
@@ -102,14 +107,12 @@ endif
 
 .PHONY: run
 run: build
-	${Q}echo "Running '${name}'"
+	${Q}echo "Running '${name}' (needs 'xhost +local:' on the host for X)"
 	${Q}docker run \
             --interactive --tty --rm \
             --net=host \
             --name=${name} \
-	    --user "${UID}:${GID}" \
             -e DISPLAY="${DISPLAY}" \
-            -e XCOOKIE="${XCOOKIE}" \
             --volume=${XSOCK}:${XSOCK}:rw \
             ${name}
 

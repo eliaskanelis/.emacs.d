@@ -86,36 +86,36 @@
 
 (require 'server)
 (unless (server-running-p)
-    (log "Starting server")
+    (vb/log "Starting server")
     (server-start))
 
 ;; ---------------------------------------------------------------------------
 
 (when (is-linux-p)
-  (log "Linux-specific feature enabled"))
+  (vb/log "Linux-specific feature enabled"))
 
 (when (is-windows-p)
-  (log "Windows-specific feature enabled"))
+  (vb/log "Windows-specific feature enabled"))
 
 (if (display-graphic-p (selected-frame))
-    (log "GUI at startup")
-  (log "CLI/terminal at startup"))
+    (vb/log "GUI at startup")
+  (vb/log "CLI/terminal at startup"))
 
 (if (display-graphic-p)
-    (log "Running in GUI")
-  (log "Running in terminal/CLI"))
+    (vb/log "Running in GUI")
+  (vb/log "Running in terminal/CLI"))
 
 (if (executable-find "git")
-    (log "Git is available")
-  (log "Git is not installed"))
+    (vb/log "Git is available")
+  (vb/log "Git is not installed"))
 
 ;; (unless (executable-find "git")
-;;   (log "Git is required, exiting...")
+;;   (vb/log "Git is required, exiting...")
 ;;   (kill-emacs 1))
 
 (if (is-font-available-p "Source Code Pro")
-    (log "Found font")
-  (log "Could not find font"))
+    (vb/log "Found font")
+  (vb/log "Could not find font"))
 
 ;; ---------------------------------------------------------------------------
 
@@ -126,16 +126,16 @@
 
 ;; (use-package mock-package
 ;;   :init
-;;   (log "mock-package :init called")
+;;   (vb/log "mock-package :init called")
 ;;   ;; simulate a hook
-;;   (add-hook 'after-init-hook (lambda () (log "mock-package after-init-hook running")))
+;;   (add-hook 'after-init-hook (lambda () (vb/log "mock-package after-init-hook running")))
 
 ;;   :config
-;;   (log "mock-package :config called")
+;;   (vb/log "mock-package :config called")
 
 ;;   :hook
-;;   ((prog-mode . (lambda () (log "mock-package prog-mode hook fired")))
-;;    (text-mode . (lambda () (log "mock-package text-mode hook fired")))))
+;;   ((prog-mode . (lambda () (vb/log "mock-package prog-mode hook fired")))
+;;    (text-mode . (lambda () (vb/log "mock-package text-mode hook fired")))))
 
 ;; ;; ---------------------------------------------------------------------------
 ;; ;; Set the garbage collection early to load faster.
@@ -160,7 +160,7 @@
   file exists and is readable before loading it.
   "
   (interactive)
-  (let ((default-config-file "config.org")
+  (let* ((default-config-file "config.org")
         (custom-config-file (expand-file-name
                              (or config-file default-config-file) init-el-directory)))
     (when (file-readable-p custom-config-file)

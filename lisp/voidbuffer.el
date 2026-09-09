@@ -5,7 +5,7 @@
 
 ;; (defun log-require (orig-fun &rest args)
 ;;   (let ((feature (car args)))
-;;     (log "[LOAD] Loading: %s" feature)
+;;     (vb/log "[LOAD] Loading: %s" feature)
 ;;     (apply orig-fun args)))
 
 ;; (advice-add 'require :around #'log-require)
@@ -16,7 +16,7 @@
 ;; (require 'core)
 
 ;; (defun my/use-package-log (name keyword _args _rest _state)
-;;   (log "[use-package] %s - handling %s" name keyword))
+;;   (vb/log "[use-package] %s - handling %s" name keyword))
 
 ;; ;; Add advice for *all* use-package keywords
 ;; (dolist (kw '(:init :config :hook :bind :after :commands

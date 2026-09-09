@@ -7,3 +7,9 @@
 /config.el
 /config/*.el
 .python-environments
+
+# Previous lock file, kept by vb/elpaca-update
+/elpaca-lock.el.old
+
+# Byte-compiled output (this config loads source; stale .elc shadows it)
+*.elc

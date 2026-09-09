@@ -3,8 +3,10 @@
 ;; ---------------------------------------------------------------------------
 ;; Better syntax highlighting
 
-(unless (featurep 'treesit)
-  (log "Tree-sitter NOT available"))
+;; `featurep' is nil until treesit is loaded; `treesit-available-p' is the
+;; actual capability test (and is missing entirely in non-treesit builds).
+(unless (and (fboundp 'treesit-available-p) (treesit-available-p))
+  (vb/log "Tree-sitter NOT available"))
 
 
 ;; (use-package tree-sitter

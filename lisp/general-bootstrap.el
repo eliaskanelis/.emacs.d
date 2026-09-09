@@ -11,10 +11,10 @@
   (global-unset-key (kbd "C-z"))
   (general-create-definer my-z-leader
     :prefix "C-z")
-  
+
   (general-create-definer my-keys
     :prefix "C-c")
-  
+
   (general-create-definer programmer-keys
     :prefix "C-,")
 

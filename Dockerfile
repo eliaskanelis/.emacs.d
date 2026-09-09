@@ -13,16 +13,16 @@ LABEL maintainer="Kanelis Elias <e.kanelis@voidbuffer.com>"
 # Packages to install
 
 # https://pkgs.alpinelinux.org/packages
-ARG PACKAGES="bash sudo emacs-x11 git ca-certificates gpg gnutls ncurses libxpm"
+ARG PACKAGES="bash sudo emacs-x11 git ca-certificates gpg gnutls ncurses libxpm fzf"
 
 RUN apk update && apk add --no-cache ${PACKAGES}
 
 # ----------------------------------------------------------
 # USER
 
-ARG PUID="${UID:-1000}"
-ARG PGID="${GID:-1000}"
-ARG USERNAME="${USER:-tedi}"
+ARG PUID=1000
+ARG PGID=1000
+ARG USERNAME="tedi"
 
 # Create a new user on start
 RUN addgroup -g ${PGID} ${USERNAME}

@@ -23,9 +23,10 @@
   :custom
   ;; Hide the cursor in inactive windows.
   (cursor-in-non-selected-windows nil)
+  :config
   ;; Modeline
-  (line-number-mode 1)  ;; Show line numbers in the modeline
-  (column-number-mode 1) ;; Show column number in the modeline
+  (line-number-mode 1)     ;; Show line numbers in the modeline
+  (column-number-mode 1)   ;; Show column number in the modeline
   (size-indication-mode 1)) ;; Show the file size in the modeline
 
 ;; ---------------------------------------------------------------------------
@@ -67,7 +68,7 @@
   (my-keys
     "d" '(crux-duplicate-current-line-or-region :wk "Duplicate current line")
     "k" '(crux-kill-other-buffers :wk "Kill all other buffers")
-    "o" '(crux-open-with :wk "Open with external program")))
+    "x" '(crux-open-with :wk "Open with external program")))
 
 ;; ---------------------------------------------------------------------------
 (provide 'editor)

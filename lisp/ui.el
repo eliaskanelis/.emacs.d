@@ -5,26 +5,51 @@
 
 ;; Font configuration
 (defvar modeline-font "Source Code Pro"
-  "Font to use for modeline")
+  "Font to use for the default face and the modeline.")
 (defvar modeline-font-height 100
-  "Height of modeline font")
+  "Height of `modeline-font', in 1/10 pt.")
 
 ;; ---------------------------------------------------------------------------
 ;; Font
 
+(defun vb/apply-font (face)
+  "Set FACE to `modeline-font'.
+Silent about a missing font -- `vb/apply-fonts' checks that once for all
+faces, so a daemon client frame does not warn three times per frame."
+  (when (and (display-graphic-p) (facep face))
+    (set-face-attribute face nil
+                        :family modeline-font
+                        :height modeline-font-height)
+    (vb/log "Applied %s font to %s" modeline-font face)))
+
+(defvar vb/font-warning-issued nil
+  "Non-nil once a missing `modeline-font' has been reported.")
+
+(defun vb/apply-fonts ()
+  "Apply `modeline-font' to the default and modeline faces.
+Safe to call before doom-modeline loads: `vb/apply-font' skips faces that
+do not exist yet.  A missing font is reported once per session -- this runs
+from `server-after-make-frame-hook', so warning per call would pop
+*Warnings* on every daemon client frame forever."
+  (when (display-graphic-p)
+    (if (not (is-font-available-p modeline-font))
+        (unless vb/font-warning-issued
+          (setq vb/font-warning-issued t)
+          (warn "Font `%s' is not available; keeping the default" modeline-font))
+      (vb/apply-font 'default)
+      ;; `mode-line-active' only exists since Emacs 29; fall back to `mode-line'.
+      (vb/apply-font (if (facep 'mode-line-active) 'mode-line-active 'mode-line))
+      (vb/apply-font 'mode-line-inactive))))
+
 (use-package emacs
   :ensure nil
   :config
-  (when (display-graphic-p)
-  (if (is-font-available-p modeline-font)
-    (progn
-      (set-face-attribute
-       'default nil
-       :family modeline-font
-       :height modeline-font-height)
-        (log "Applied %s font" modeline-font))
-  (error "%s font is not available" modeline-font)))
-)
+  (vb/apply-fonts)
+  ;; Under `emacs --daemon' there is no graphical frame during init, so
+  ;; `display-graphic-p' is nil and nothing is applied -- including
+  ;; doom-modeline's faces, whose :config also runs frameless.  Re-apply all of
+  ;; them when the first client frame appears.
+  (add-hook 'server-after-make-frame-hook #'vb/apply-fonts))
 
 ;; ---------------------------------------------------------------------------
 ;; Show minibuffer in the center
@@ -63,7 +88,7 @@
 (use-package monokai-theme
   ;; TODO: Until PR is merged
   ;; https://github.com/oneKelvinSmith/monokai-emacs/pull/125
-  :ensure (:repo "eliaskanelis/monokai-emacs" :branch "master")
+  :ensure (:host github :repo "eliaskanelis/monokai-emacs" :branch "master")
   :config
   (setq monokai-user-variable-pitch t)
   (load-theme 'monokai t))
@@ -75,42 +100,22 @@
   :ensure t
   :init (doom-modeline-mode 1)
   :config
-  (when (display-graphic-p)
-  (if (is-font-available-p modeline-font)
-      (progn
-        (if (facep 'mode-line-active)
-            (set-face-attribute
-	     'mode-line-active nil
-	     :family modeline-font
-	     :height modeline-font-height)
-          (set-face-attribute
-	   'mode-line nil
-	   :family modeline-font
-	   :height modeline-font-height))
-        (set-face-attribute
-	 'mode-line-inactive nil
-	 :family modeline-font
-	 :height modeline-font-height))
-      (error "%s font is not available" modeline-font))))
+  (vb/apply-fonts))
 
 ;; ---------------------------------------------------------------------------
 ;; Looks
 (use-package emacs
   :ensure nil
   :custom
-  ;; Sane and minimalistic settings
-  (inhibit-startup-screen t) ;; Prevent default splash screen
+  ;; Sane and minimalistic settings.
+  ;; (startup screen, bell and cursor blink are handled in emacs-config.el)
   (initial-scratch-message nil) ;; Remove initial scratch message
-  (ring-bell-function 'ignore) ;; Disable bell  
-
   :config
-  ;; Sanity
-  (blink-cursor-mode -1)   ;; Do not blink cursor
-  ;; Minimalism
-  (tool-bar-mode -1)
+  ;; Minimalism.  Neither `tool-bar-mode' nor `scroll-bar-mode' exists in a
+  ;; terminal build; `menu-bar-mode' always does.
+  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  )
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)))
 
 ;; ---------------------------------------------------------------------------
 ;; Dim inactive windows
