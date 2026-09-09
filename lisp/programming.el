@@ -19,5 +19,19 @@
               (display-fill-column-indicator-mode 1))))
 
 ;; ---------------------------------------------------------------------------
+;; Markdown
+
+;; Registers its own `auto-mode-alist' entries via autoloads, so installing
+;; it is all that is needed to enable it.
+(use-package markdown-mode
+  :ensure t)
+
+;; ---------------------------------------------------------------------------
+;; Dockerfile
+
+(use-package dockerfile-mode
+  :ensure t)
+
+;; ---------------------------------------------------------------------------
 (provide 'programming)
 ;;; programming.el ends here
