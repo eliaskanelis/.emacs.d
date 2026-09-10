@@ -151,16 +151,25 @@
   (setq org-cycle-include-plain-lists 'integrate)
 
   ;; === Keybindings ===
+  ;;
+  ;; Nothing is bound into `org-agenda-mode-map': SPC is already a command
+  ;; there (`org-agenda-show-and-scroll-up'), so it cannot also be a prefix,
+  ;; and general reports "starts with non-prefix key SPC".  That map keeps its
+  ;; own keys, which evil-org-agenda makes vim-like.
   :general
+  ;; Reachable from anywhere, as in neovim -- you open the agenda from
+  ;; wherever you happen to be.
   (my-keys
-    :keymaps '(org-mode-map org-agenda-mode-map)
     "o" '(:ignore t :wk "org")
     "o a" '(org-agenda :wk "agenda")
-    "o c" '(org-capture :wk "capture")
-    "o e" '(org-babel-execute-buffer :wk "execute buffer")
-    "o b" '(org-babel-execute-subtree :wk "execute block")
-    "o l" '(org-insert-link :wk "insert link")
-    "o t" '(org-todo :wk "toggle todo")))
+    "o c" '(org-capture :wk "capture"))
+  ;; Needs an org buffer, so it belongs on the local leader.
+  (programmer-keys
+    :keymaps 'org-mode-map
+    "e" '(org-babel-execute-buffer :wk "execute buffer")
+    "b" '(org-babel-execute-subtree :wk "execute block")
+    "l" '(org-insert-link :wk "insert link")
+    "t" '(org-todo :wk "toggle todo")))
 
 ;; Optional: Use org-bullets for even nicer headers
 (use-package org-bullets
@@ -217,14 +226,17 @@ ARG and ARGS are passed through to `org-roam-node-insert'."
   :ensure t
   :commands org-roam db-sync
   :general
-  ;; Everything roam lives under `C-c n'.  Binding bare "f"/"v"/"l"/"i"/"t"
-  ;; here shadowed the C-c f (file) and C-c b (buffer) prefixes from
+  ;; Everything roam lives under `SPC n'.  Binding bare "f"/"v"/"l"/"i"/"t"
+  ;; here shadowed the SPC f (file) and SPC b (buffer) prefixes from
   ;; general-bootstrap.el, which silently broke those menus.
+  ;;
+  ;; All of it is global: a Zettelkasten is reached from wherever you are, and
+  ;; the previous org-mode-map/org-agenda-mode-map scoping cannot work under a
+  ;; SPC leader -- SPC is already a command in the agenda map.
   (my-keys
+    "n" '(:ignore t :wk "roam")
     "n f" '(org-roam-node-find :wk "List my atomic notes")
-    "n v" '(org-roam-node-random :wk "Open a random note"))
-  (my-keys
-    :keymaps '(org-mode-map org-agenda-mode-map)
+    "n v" '(org-roam-node-random :wk "Open a random note")
     "n l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
     "n i" '(org-roam-node-insert :wk "Insert note")
     "n a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")

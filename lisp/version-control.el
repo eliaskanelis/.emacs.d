@@ -50,7 +50,11 @@
   ;; Auto-refresh magit buffer when files change on disk
   (magit-refresh-status-buffer t)
   :init
-  (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1))
+  (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  :general
+  (my-keys
+    "g" '(:ignore t :wk "Git")
+    "g g" '(magit-status :wk "Magit status")))
 
 ;; ---------------------------------------------------------------------------
 ;; TODOs in magit

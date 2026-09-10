@@ -58,6 +58,9 @@
 
 ;; ---------------------------------------------------------------------------
 ;; Core modules
+;; Evil first: the leader definers in general-bootstrap bind into evil states,
+;; so evil has to exist before those macros are expanded.
+(require 'evil-config)
 (require 'general-bootstrap)
 
 ;; ---------------------------------------------------------------------------

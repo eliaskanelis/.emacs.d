@@ -25,7 +25,8 @@ On first start Elpaca clones itself and every package listed in
 | =init.el=               | Entry point. Loads every module in =lisp/=.          |
 | =lisp/core.el=          | =vb/log= and platform predicates.                    |
 | =lisp/elpaca-bootstrap.el= | Package manager + lock file.                    |
-| =lisp/general-bootstrap.el= | =C-c= / =C-z= / =C-,= leader keys.                |
+| =lisp/general-bootstrap.el= | =SPC= global and =SPC m= local leader keys.        |
+| =lisp/evil-config.el=   | Vim emulation (evil).  Modal editing is always on.  |
 | =lisp/*.el=             | One module per topic, all =require='d from =init.el=. |
 | =elpaca-lock.el=        | Pinned package commits. Under version control.     |
 
