@@ -28,12 +28,46 @@ On first start Elpaca clones itself and every package listed in
 | =lisp/general-bootstrap.el= | =SPC= global and =SPC m= local leader keys.        |
 | =lisp/evil-config.el=   | Vim emulation (evil).  Modal editing is always on.  |
 | =lisp/*.el=             | One module per topic, all =require='d from =init.el=. |
+| =lisp/nous.el=          | Nous client (=SPC n=), enabled when the =nous= binary exists. |
 | =elpaca-lock.el=        | Pinned package commits. Under version control.     |
 
 Generated files (backups, auto-saves, package builds) go to =~/.cache/emacs/=,
 never into this repository. That path is deliberately fixed and does not follow
 =XDG_CACHE_HOME=: honouring it would relocate an existing install and orphan the
 old package tree.
+
+* Programming
+
+Emacs' native stack, so the package count stays low:
+
+| Concern       | What is used                                  |
+|---------------+-----------------------------------------------|
+| Parsing       | =treesit= via =treesit-auto= (grammars built on demand) |
+| LSP           | =eglot= (clangd, rust-analyzer, pyright)            |
+| Diagnostics   | =flymake=                                       |
+| Completion    | =corfu= + =cape= in the buffer, =vertico= + =consult= in the minibuffer |
+
+This replaces the =lsp-mode= / =lsp-ui= / =lsp-pyright= / =flycheck= set that used
+to sit unused in =programming-unused.el=.
+
+** Keys
+
+=SPC= is the global leader, =SPC m= the major-mode local one.  Every language
+fills in the same local verbs:
+
+| Key       | C / C++              | Rust           | Python              |
+|-----------+----------------------+----------------+---------------------|
+| =SPC m b= | =make=                 | =cargo build=    | send buffer to REPL |
+| =SPC m r= | =make run=             | =cargo run=      | =run-python=          |
+| =SPC m t= | =make test=            | =cargo test=     | =pytest=              |
+| =SPC m l= | diagnostics          | =cargo clippy=   | diagnostics         |
+| =SPC m d= | =gdb=                  |                |                     |
+
+LSP keys follow neovim: =gd= definition, =gr= references, =gi= implementation, =K=
+hover, =]d= / =[d= next and previous diagnostic, =SPC c a= code action, =SPC c r=
+rename, =SPC c f= format.
+
+Docker is =SPC d=: a transient over containers, images, volumes and compose.
 
 * Reproducible installs
 

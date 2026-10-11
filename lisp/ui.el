@@ -88,6 +88,7 @@ from `server-after-make-frame-hook', so warning per call would pop
 (use-package monokai-theme
   ;; TODO: Until PR is merged
   ;; https://github.com/oneKelvinSmith/monokai-emacs/pull/125
+  ;; TODO: Until PR for inheritance cyle for org-level-8 is created/merged.
   :ensure (:host github :repo "eliaskanelis/monokai-emacs" :branch "master")
   :config
   (setq monokai-user-variable-pitch t)

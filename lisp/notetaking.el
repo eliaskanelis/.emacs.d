@@ -26,8 +26,8 @@
   :ensure nil
   :general
   (my-keys
-    "n" '(:ignore t :wk "notes")
-    "n n" '(voidbuffer:visit-notes :wk "Open notes")))
+    "e" '(:ignore t :wk "Edit")
+    "e n" '(voidbuffer:visit-notes :wk "Global notes")))
 
 ;; ---------------------------------------------------------------------------
 
@@ -234,15 +234,15 @@ ARG and ARGS are passed through to `org-roam-node-insert'."
   ;; the previous org-mode-map/org-agenda-mode-map scoping cannot work under a
   ;; SPC leader -- SPC is already a command in the agenda map.
   (my-keys
-    "n" '(:ignore t :wk "roam")
-    "n f" '(org-roam-node-find :wk "List my atomic notes")
-    "n v" '(org-roam-node-random :wk "Open a random note")
-    "n l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
-    "n i" '(org-roam-node-insert :wk "Insert note")
-    "n a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")
-    "n t a" '(org-roam-tag-add :wk "Add tag")
-    "n t r" '(org-roam-tag-remove :wk "Remove tag")
-    "n u" '(org-roam-ui-open :wk "Open UI")
+    "r" '(:ignore t :wk "roam")
+    "r f" '(org-roam-node-find :wk "List my atomic notes")
+    "r v" '(org-roam-node-random :wk "Open a random note")
+    "r l" '(org-roam-buffer-toggle :wk "org-roam-buffer-toggle")
+    "r i" '(org-roam-node-insert :wk "Insert note")
+    "r a" '(voidbuffer:org-roam-node-insert-immediate :wk "Insert intermediate note")
+    "r t a" '(org-roam-tag-add :wk "Add tag")
+    "r t r" '(org-roam-tag-remove :wk "Remove tag")
+    "r u" '(org-roam-ui-open :wk "Open UI")
 	;; ("C-c d t" . '(org-roam-dailies-goto-today :wk "Open today")
 	;; ("C-c d p" . '(org-roam-dailies-goto-previous-note :wk "Go to previous")
 	;; ("C-c d n" . '(org-roam-dailies-goto-next-note :wk "Go to next")
@@ -358,6 +358,29 @@ ARG and ARGS are passed through to `org-roam-node-insert'."
   (org-roam-ui-update-on-save t)
   (org-roam-ui-open-on-start t)
   :hook (org-mode . org-roam-ui-follow-mode))
+
+;; ---------------------------------------------------------------------------
+;; Nous -- external brain.  The client ships in lisp/nous.el; everything it
+;; does is a call to the `nous' binary, so it is only turned on where that
+;; binary exists.  `nous-mode' also binds its own `C-c n' prefix.
+
+(use-package nous
+  :ensure nil
+  :when (executable-find "nous")
+  :hook ((org-mode markdown-mode) . nous-mode)
+  :general
+  (my-keys
+    "n" '(:ignore t :wk "nous")
+    "n n" '(nous-new :wk "New entity")
+    "n o" '(nous-open :wk "Open entity")
+    "n l" '(nous-insert-link :wk "Insert link")
+    "n f" '(nous-follow :wk "Follow link")
+    "n b" '(nous-backlinks :wk "Backlinks")
+    "n r" '(nous-related :wk "Related")
+    "n s" '(nous-search :wk "Search")
+    "n c" '(nous-check :wk "Check this file")
+    "n u" '(nous-resurface :wk "Resurface")
+    "n d" '(nous-doctor :wk "Doctor")))
 
 ;; ---------------------------------------------------------------------------
 (provide 'notetaking)

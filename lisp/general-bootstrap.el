@@ -50,12 +50,11 @@
     :states '(normal visual motion)
     :prefix "SPC m")
 
-  ;; NOTE: everything below must be a command that actually exists in a
-  ;; running Emacs.  consult, embark and dirvish are configured in
-  ;; examples.el / programming-unused.el, which init.el does NOT load, so they
-  ;; are not installed -- binding `consult-buffer' here would give a key that
-  ;; reports "void function".  Built-ins are used instead; swap them for the
-  ;; consult commands in the same breath as loading those modules.
+  ;; NOTE: everything below must name a command that exists in a running
+  ;; Emacs.  General binds a symbol whether or not anything defines it, so a
+  ;; typo or a package that is configured but never loaded produces a key that
+  ;; only fails when pressed.  consult lives in minibuffer-config.el and
+  ;; dirvish in utilities.el; both are required from init.el.
 
   (my-keys
     ;; Label only -- the bindings under it come from each major mode, see
@@ -63,8 +62,8 @@
     "m" '(:ignore t :wk "local (mode)")
     ;; Top level: the two things reached most often, one keystroke past SPC.
     "SPC" '(find-file :wk "Find file")
-    "," '(switch-to-buffer :wk "Switch buffer")
-    "/" '(project-find-regexp :wk "Search project"))
+    "," '(consult-buffer :wk "Switch buffer")
+    "/" '(consult-ripgrep :wk "Search project"))
 
   (my-keys
     ;; File operations
@@ -72,12 +71,12 @@
     "f f" '(find-file :wk "Find file")
     "f s" '(save-buffer :wk "Save file")
     "f r" '(revert-buffer :wk "Revert file")
-    "f d" '(dired :wk "Open dired"))
+    "f d" '(dirvish :wk "Open dirvish"))
 
   (my-keys
     ;; Buffer operations
     "b" '(:ignore t :wk "Buffer operations")
-    "b b" '(switch-to-buffer :wk "Switch buffer")
+    "b b" '(consult-buffer :wk "Switch buffer")
     "b k" '(kill-current-buffer :wk "Kill buffer")
     "b n" '(next-buffer :wk "Next buffer")
     "b p" '(previous-buffer :wk "Previous buffer")
@@ -97,9 +96,9 @@
     ;; Search and replace.  In-buffer search is vim's `/'; these are the
     ;; project-wide equivalents of telescope.
     "s" '(:ignore t :wk "Search and replace")
-    "s s" '(isearch-forward :wk "Search buffer")
-    "s g" '(project-find-regexp :wk "Grep project")
-    "s i" '(imenu :wk "Jump to symbol")
+    "s s" '(consult-line :wk "Search buffer")
+    "s g" '(consult-ripgrep :wk "Grep project")
+    "s i" '(consult-imenu :wk "Jump to symbol")
     "s r" '(query-replace :wk "Query replace"))
 
   (my-keys
